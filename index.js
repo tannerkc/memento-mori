@@ -8,7 +8,7 @@ const chalk = require('chalk');
 
 // Default configuration values
 const DEFAULT_CONFIG = {
-  color: 'red',
+  color: '#BB443E',
   birthdate: null,
 };
 
@@ -55,33 +55,45 @@ const isValidBirthdate = (birthdate) => {
 const displayMementoMori = (config) => {
   const currentDate = new Date();
   const birthdate = new Date(config.birthdate);
+  const totalDays = Math.floor((new Date(birthdate.getFullYear() + 70, birthdate.getMonth(), birthdate.getDate()) - birthdate) / (1000 * 60 * 60 * 24));
   const daysLived = Math.floor((currentDate - birthdate) / (1000 * 60 * 60 * 24));
 
   let grid = '';
-  for (let i = 0; i < 365; i++) {
+  for (let i = 0; i < totalDays; i++) {
     if (i < daysLived) {
-      grid += chalk.bgHex(config.color).black(' ');
+      grid += chalk.hex(config.color)(' • ');
     } else {
-      grid += ' ';
+      grid += chalk.green(' • ');
     }
 
-    if ((i + 1) % 7 === 0) {
+    if ((i + 1) % 50 === 0) {
       grid += '\n';
     }
   }
 
+  const daysLeft = totalDays - daysLived;
+  const yearsLeft = Math.floor(daysLeft / 365);
+
   console.log(grid);
+  console.log(" ")
+  console.log("You have:")
+  console.log(`${daysLeft} days left. Or`)
+  console.log(`${yearsLeft} years left.`)
 };
 
 // Define CLI options and actions
 program
   .option('--config.color <color>', 'Set color for days lived')
   .option('--config.birthdate <birthdate>', 'Set birthdate')
-  .option('--help', 'Display help message')
+  .option('-h','--help', 'Display help message')
   .parse(process.argv);
 
+const options = program.opts();
+
+let birthdate = options['config.birthdate']
+let colorChange = options['config.color']
 // Handle --help flag
-if (program.help) {
+if (options.help) {
   showHelp();
   process.exit();
 }
@@ -90,12 +102,12 @@ if (program.help) {
 let config = loadConfig();
 
 // Update configuration with command-line arguments
-if (program.configColor && isValidColor(program.configColor)) {
-  config.color = program.configColor;
+if (colorChange && isValidColor(colorChange)) {
+  config.color = colorChange;
 }
 
-if (program.configBirthdate && isValidBirthdate(program.configBirthdate)) {
-  config.birthdate = program.configBirthdate;
+if (birthdate && isValidBirthdate(birthdate)) {
+  config.birthdate = birthdate;
 }
 
 // If birthdate is not set, prompt the user to enter it

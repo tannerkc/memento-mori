@@ -1,0 +1,26 @@
+{
+  "name": "memento-mori",
+  "version": "1.0.0",
+  "description": "A CLI tool to visualize life's journey with a Memento Mori calendar.",
+  "main": "index.js",
+  "bin": {
+    "memento-mori": "./index.js"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    "memento",
+    "cli",
+    "calendar",
+    "life"
+  ],
+  "author": "Tanner Cottle",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "commander": "^8.3.0",
+    "inquirer": "^8.2.0",
+    "prompts": "^2.4.2"
+  }
+}
