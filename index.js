@@ -8,7 +8,8 @@ const chalk = require('chalk');
 
 // Default configuration values
 const DEFAULT_CONFIG = {
-  color: '#BB443E',
+  markedColor: '#BB443E',
+  daysLeftColor: '#8C9A55',
   birthdate: null,
 };
 
@@ -61,9 +62,9 @@ const displayMementoMori = (config) => {
   let grid = '';
   for (let i = 0; i < totalDays; i++) {
     if (i < daysLived) {
-      grid += chalk.hex(config.color)(' • ');
+      grid += chalk.hex(config.markedColor)(' • ');
     } else {
-      grid += chalk.green(' • ');
+      grid += chalk.hex(config.daysLeftColor)(' • ');
     }
 
     if ((i + 1) % 50 === 0) {
@@ -91,7 +92,8 @@ program
 const options = program.opts();
 
 let birthdate = options['config.birthdate']
-let colorChange = options['config.color']
+let markedColor = options['config.markedColor']
+let daysLeftColor = options['config.daysLeftColor']
 // Handle --help flag
 if (options.help) {
   showHelp();
@@ -102,8 +104,11 @@ if (options.help) {
 let config = loadConfig();
 
 // Update configuration with command-line arguments
-if (colorChange && isValidColor(colorChange)) {
-  config.color = colorChange;
+if (markedColor && isValidColor(markedColor)) {
+  config.markedColor = markedColor;
+}
+if (daysLeftColor && isValidColor(daysLeftColor)) {
+  config.daysLeftColor = daysLeftColor;
 }
 
 if (birthdate && isValidBirthdate(birthdate)) {
